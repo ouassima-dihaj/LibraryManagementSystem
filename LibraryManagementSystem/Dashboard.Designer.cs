@@ -151,6 +151,7 @@
             this.completeBookDetailsToolStripMenuItem.Name = "completeBookDetailsToolStripMenuItem";
             this.completeBookDetailsToolStripMenuItem.Size = new System.Drawing.Size(255, 54);
             this.completeBookDetailsToolStripMenuItem.Text = "Complete Book Details";
+            this.completeBookDetailsToolStripMenuItem.Click += new System.EventHandler(this.completeBookDetailsToolStripMenuItem_Click);
             // 
             // existToolStripMenuItem
             // 
