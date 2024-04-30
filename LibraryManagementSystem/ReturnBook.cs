@@ -25,7 +25,11 @@ namespace LibraryManagementSystem
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-
+            if (txtEnterEnroll.Text == "")
+            {
+                panel2.Visible = false;
+                dataGridView1.DataSource = null;
+            }
         }
 
         private void btnSearchStudent_Click(object sender, EventArgs e)
@@ -111,6 +115,21 @@ namespace LibraryManagementSystem
             ReturnBook_Load(this,null);//reload
 
 
+        }
+
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            txtEnterEnroll.Clear();
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            this.Close();//to close this form 
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            panel2.Visible = false;
         }
     }
 }
