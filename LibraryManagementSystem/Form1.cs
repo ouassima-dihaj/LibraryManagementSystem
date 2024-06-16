@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -32,7 +33,7 @@ namespace LibraryManagementSystem
         {
 
         }
-
+        ///close button ==> red 
         private void button3_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -49,16 +50,17 @@ namespace LibraryManagementSystem
         }
 
         
-
+        //to clear the textBox ==> mouseClick
         private void txtPassword_MouseClick(object sender, MouseEventArgs e)
         {
             if (txtPassword.Text == "Password")
             {
                 txtPassword.Clear();
+                //password 
                 txtPassword.PasswordChar = '*';
             }
         }
-
+        //to clear the textBox ==> mouseClick
         private void txtUserName_MouseClick_1(object sender, MouseEventArgs e)
         {
               if (txtUserName.Text == "Username")
@@ -73,46 +75,50 @@ namespace LibraryManagementSystem
             string connectionString = "Data Source=DESKTOP-P4NI2GF\\SQLEXPRESS01;Database=library;Integrated Security=True";
 
             // SQL query
-            string query = "SELECT * FROM loginTable WHERE username = @username AND pass = @password";
+            string query = "SELECT * FROM signUpTable WHERE username = @username";
 
             // Create a SqlConnection and SqlCommand
             using (SqlConnection con = new SqlConnection(connectionString))
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
-                // Add parameters to prevent SQL injection
+                // Add parameter to prevent SQL injection
                 cmd.Parameters.AddWithValue("@username", txtUserName.Text);
-                cmd.Parameters.AddWithValue("@password", txtPassword.Text);
 
                 try
                 {
                     con.Open();
 
-                    // Create a new instance of SqlDataAdapter
-                    SqlDataAdapter da = new SqlDataAdapter(cmd);
-
-                    // Create a new DataSet
-                    DataSet ds = new DataSet();
-
-                    // Fill the DataSet with data from the database
-                    da.Fill(ds);
-
-                    // Check if any rows were returned
-                    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                    // Execute the query and get the DataReader
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        // Login successful
-                        //MessageBox.Show("Login successful!");
+                        // Check if any rows were returned
+                        if (reader.Read())
+                        {
+                            // Hash the entered password
+                            string enteredPassword = txtPassword.Text;
+                            string hashedPassword = HashPassword(enteredPassword);
 
-                        // Close the current login form
-                        this.Hide(); // Hide the login form
+                            // Compare the hashed entered password with the stored hashed password
+                            if (hashedPassword == reader["pass"].ToString())
+                            {
+                                // Login successful
+                                this.Hide(); // Hide the login form
 
-                        // Open the Dashboard form
-                       Dashboard dashboardForm = new Dashboard();
-                        dashboardForm.Show(); // Show the dashboard form
-                    }
-                    else
-                    {
-                        // Invalid credentials
-                        MessageBox.Show("Invalid username or password!");
+                                // Open the Dashboard interface
+                                Dashboard dashboardForm = new Dashboard();
+                                dashboardForm.Show(); 
+                            }
+                            else
+                            {
+                                // Invalid password
+                                MessageBox.Show("Invalid password!");
+                            }
+                        }
+                        else
+                        {
+                            // Invalid username
+                            MessageBox.Show("Invalid username or password!");
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -122,5 +128,16 @@ namespace LibraryManagementSystem
             }
         }
 
+        private string HashPassword(string password)
+        {
+            // Hash the password using SHA256
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                byte[] hashBytes = sha256.ComputeHash(passwordBytes);
+                string hashedPassword = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+                return hashedPassword;
+            }
+        }
     }
 }

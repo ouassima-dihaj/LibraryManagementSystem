@@ -32,7 +32,7 @@ namespace LibraryManagementSystem
         {
 
         }
-
+        ///fill the combobox with books avai
         private void issueBook_Load(object sender, EventArgs e)
         {
             SqlConnection con = new SqlConnection();
@@ -40,7 +40,7 @@ namespace LibraryManagementSystem
 
             try
             {
-                con.Open();  // Open the connection here
+                con.Open();  
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = con;
                 cmd.CommandText = "select bName from NewBook";
@@ -81,7 +81,7 @@ namespace LibraryManagementSystem
                 da.Fill(ds);
 
                 ////////////////////////////////////
-                ///3 code to count how many books has benn issued on this enrollement no
+                ///3 code to count how many books has been issued for this enrollement no
                 cmd.CommandText = "select count(std_enroll) from IRBook where std_enroll='" + eid + "' and book_return_date IS NULL";
                 SqlDataAdapter da1 = new SqlDataAdapter(cmd);
                 DataSet ds1 = new DataSet();
@@ -115,44 +115,84 @@ namespace LibraryManagementSystem
         {
             
         }
-       //i was stopped here continue ....
+        ///stop here 
         private void btnIssueBook_Click(object sender, EventArgs e)
         {
             if (txtName.Text != "")
             {
-                if (comboBook.SelectedIndex != -1 && count <= 2)
+                String enroll = txtEnrollement.Text;
+                String sname = txtName.Text;
+                String sdep = txtDepartment.Text;
+                String sem = txtSemester.Text;
+                Int64 contact = Int64.Parse(txtContact.Text);
+                String email = txtEmail.Text;
+                String bookName = comboBook.Text;
+                String bookIssueDate = dateTimePicker1.Text;
+
+                // Check if a book is selected
+                if (comboBook.SelectedIndex != -1)
                 {
-                    String enroll = txtEnrollement.Text;
-                    String sname = txtName.Text;
-                    String sdep = txtDepartment.Text;
-                    String sem = txtSemester.Text;
-                    Int64 contact = Int64.Parse(txtContact.Text);
-                    String email = txtEmail.Text;
-                    String bookName = comboBook.Text;
-                    String bookIssueDate = dateTimePicker1.Text;
                     SqlConnection con = new SqlConnection();
                     con.ConnectionString = "Data Source=DESKTOP-P4NI2GF\\SQLEXPRESS01;Database=library;Integrated Security=True";
                     SqlCommand cmd = new SqlCommand();
                     cmd.Connection = con;
-                    con.Open();
-                    cmd.CommandText = "insert into IRBook (std_enroll,std_name ,std_dep ,std_sem ,std_contact,std_email,book_name ,book_issue_date ) " +
-                        "values('" + enroll + "','" + sname + "','" + sdep + "','" + sem + "'," + contact + ",'" + email + "','" + bookName + "','" + bookIssueDate + "') ";
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    MessageBox.Show("Data saved ", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    try
+                    {
+                        con.Open();
+
+                        // Check how many books have been issued to the student
+                        cmd.CommandText = "SELECT COUNT(*) FROM IRBook WHERE std_enroll = '" + enroll + "' AND book_return_date IS NULL";
+                        int issuedBooksCount = Convert.ToInt32(cmd.ExecuteScalar());
+
+                        // Check if the maximum number of books allowed to be issued is not exceeded
+                        if (issuedBooksCount <= 2) // Assuming max books allowed is 3
+                        {
+                            // Check the current quantity of the selected book
+                            cmd.CommandText = "SELECT bQuan FROM NewBook WHERE bName = '" + bookName + "'";
+                            int bookQuantity = Convert.ToInt32(cmd.ExecuteScalar());
+
+                            // Check if the book quantity is > than zero
+                            if (bookQuantity > 0)
+                            {
+                                // Insert record into IRBook table
+                                cmd.CommandText = "INSERT INTO IRBook (std_enroll, std_name, std_dep, std_sem, std_contact, std_email, book_name, book_issue_date) " +
+                                                   "VALUES ('" + enroll + "', '" + sname + "', '" + sdep + "', '" + sem + "', " + contact + ", '" + email + "', '" + bookName + "', '" + bookIssueDate + "')";
+                                cmd.ExecuteNonQuery();
+
+                                // Update NewBook table to decrease book quantity
+                                cmd.CommandText = "UPDATE NewBook SET bQuan = bQuan - 1 WHERE bName = '" + bookName + "'";
+                                cmd.ExecuteNonQuery();
+
+                                MessageBox.Show("Book issued successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Book quantity is zero. Cannot issue this book.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Maximum number of books issued (3) reached for this student.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    finally
+                    {
+                        con.Close();
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("DaSelect Book ,Or Maximum number of Book has been issued    ", "No Book Selected ", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                    MessageBox.Show("Please select a book.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
-
             }
             else
             {
-                MessageBox.Show(" Enter Valid Enrollement Number ", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                MessageBox.Show("Please enter a valid Enrolment Number.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

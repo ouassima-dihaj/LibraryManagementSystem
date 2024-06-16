@@ -73,5 +73,10 @@ namespace LibraryManagementSystem
             CompleteBookDetails cbd = new CompleteBookDetails();
             cbd.Show();
         }
+
+        private void booksToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

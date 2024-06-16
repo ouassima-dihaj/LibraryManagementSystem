@@ -70,6 +70,7 @@
             this.booksToolStripMenuItem.Name = "booksToolStripMenuItem";
             this.booksToolStripMenuItem.Size = new System.Drawing.Size(123, 54);
             this.booksToolStripMenuItem.Text = "Books";
+            this.booksToolStripMenuItem.Click += new System.EventHandler(this.booksToolStripMenuItem_Click);
             // 
             // addNewBookToolStripMenuItem
             // 
@@ -167,7 +168,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::LibraryManagementSystem.Properties.Resources.mm;
+            this.BackgroundImage = global::LibraryManagementSystem.Properties.Resources.dd;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1174, 631);
             this.Controls.Add(this.menuStrip1);

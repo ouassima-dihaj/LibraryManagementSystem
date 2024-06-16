@@ -117,9 +117,9 @@
             this.panel2.Controls.Add(this.label4);
             this.panel2.Controls.Add(this.label3);
             this.panel2.Controls.Add(this.label2);
-            this.panel2.Location = new System.Drawing.Point(364, 134);
+            this.panel2.Location = new System.Drawing.Point(364, 140);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(641, 468);
+            this.panel2.Size = new System.Drawing.Size(641, 462);
             this.panel2.TabIndex = 5;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 

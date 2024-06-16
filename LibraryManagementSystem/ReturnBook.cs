@@ -105,17 +105,46 @@ namespace LibraryManagementSystem
         {
             SqlConnection con = new SqlConnection();
             con.ConnectionString = "Data Source=DESKTOP-P4NI2GF\\SQLEXPRESS01;Database=library;Integrated Security=True";
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            con.Open();
-            cmd.CommandText = "update IRBook set book_return_date='" + dateTimePicker1.Text + "' where std_enroll='"+txtEnterEnroll.Text+"' and id = "+rowId+"";
-            cmd.ExecuteNonQuery(); ;
-            con.Close();
-            MessageBox.Show("Book Returned succefully","Success",MessageBoxButtons.OK,MessageBoxIcon.Information);
-            ReturnBook_Load(this,null);//reload
 
+            try
+            {
+                con.Open();
 
+                // update book return date 
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = con;
+                cmd.CommandText = "UPDATE IRBook SET book_return_date = '" + dateTimePicker1.Text + "' WHERE std_enroll = '" + txtEnterEnroll.Text + "' AND id = " + rowId;
+                cmd.ExecuteNonQuery();
+
+                // nom apartir de IRBook
+                SqlCommand cmdGetBookName = new SqlCommand();
+                cmdGetBookName.Connection = con;
+                cmdGetBookName.CommandText = "SELECT book_name FROM IRBook WHERE id = " + rowId;
+                string bookName = cmdGetBookName.ExecuteScalar().ToString();
+
+                // update book quantite
+                SqlCommand cmdUpdateBookQuantity = new SqlCommand();
+                cmdUpdateBookQuantity.Connection = con;
+                cmdUpdateBookQuantity.CommandText = "UPDATE NewBook SET bQuan = bQuan + 1 WHERE bName = '" + bookName + "'";
+                cmdUpdateBookQuantity.ExecuteNonQuery();
+
+                MessageBox.Show("Book Returned successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ReturnBook_Load(this, null); 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("An error occurred: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+              
+                if (con.State == System.Data.ConnectionState.Open)
+                {
+                    con.Close();
+                }
+            }
         }
+
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
@@ -124,7 +153,7 @@ namespace LibraryManagementSystem
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            this.Close();//to close this form 
+            this.Close();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

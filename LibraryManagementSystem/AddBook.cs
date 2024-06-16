@@ -79,7 +79,7 @@ namespace LibraryManagementSystem
         {
             if (MessageBox.Show("Are you Sure you want to Cancel? This will DELETE your Unsaved Data ", "confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                Application.Exit();
+                this.Close();
             }
         }
     }

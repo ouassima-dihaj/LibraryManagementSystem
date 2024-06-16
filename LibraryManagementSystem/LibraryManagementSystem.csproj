@@ -90,6 +90,12 @@
     <Compile Include="ReturnBook.Designer.cs">
       <DependentUpon>ReturnBook.cs</DependentUpon>
     </Compile>
+    <Compile Include="SignUp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SignUp.Designer.cs">
+      <DependentUpon>SignUp.cs</DependentUpon>
+    </Compile>
     <Compile Include="ViewBook.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -132,6 +138,9 @@
     </Compile>
     <EmbeddedResource Include="ReturnBook.resx">
       <DependentUpon>ReturnBook.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SignUp.resx">
+      <DependentUpon>SignUp.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ViewBook.resx">
       <DependentUpon>ViewBook.cs</DependentUpon>
@@ -274,6 +283,36 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-student-male-1002.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\giphy21.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\view book gif.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icons8-student-male-10002.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\men.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\men2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bg21.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mm1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\user.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\padlock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dd.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

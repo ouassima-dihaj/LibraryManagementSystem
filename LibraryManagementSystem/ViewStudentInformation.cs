@@ -105,8 +105,7 @@ namespace LibraryManagementSystem
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
-            ///in this ds we have one table that is 0 table and in this table 
-            ///we have rows and columns
+           
             rowid = Int64.Parse(ds.Tables[0].Rows[0][0].ToString());
             txtName.Text = ds.Tables[0].Rows[0][1].ToString();
             txtEnrollement.Text = ds.Tables[0].Rows[0][2].ToString();

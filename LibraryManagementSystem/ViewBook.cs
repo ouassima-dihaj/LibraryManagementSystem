@@ -49,7 +49,7 @@ namespace LibraryManagementSystem
             con.ConnectionString = "Data Source=DESKTOP-P4NI2GF\\SQLEXPRESS01;Database=library;Integrated Security=True";
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;
-            
+           
             cmd.CommandText = "select * from NewBook";
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
@@ -79,8 +79,7 @@ namespace LibraryManagementSystem
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataSet ds = new DataSet();
             da.Fill(ds);
-            ///in this ds we have one table that is 0 table and in this table 
-            ///we have rows and columns
+            
             rowid = Int64.Parse(ds.Tables[0].Rows[0][0].ToString());
             txtBName.Text = ds.Tables[0].Rows[0][1].ToString();
             txtAuthor.Text = ds.Tables[0].Rows[0][2].ToString();
